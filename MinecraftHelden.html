@@ -26,6 +26,7 @@
         }
 
         button {
+            position: relative; /* Wichtig für die Positionierung des roten Punktes */
             display: flex;
             align-items: center;
             gap: 8px;
@@ -38,6 +39,20 @@
             font-weight: 600;
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        /* Roter Punkt Badge */
+        .new-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            width: 12px;
+            height: 12px;
+            background-color: #ff0000;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            box-shadow: 0 0 8px rgba(255, 0, 0, 0.8);
+            z-index: 10;
         }
 
         .heart-toggle {
@@ -93,6 +108,7 @@
     <h1>Prod by FlixGames</h1>
     <a href="index.html" style="position: fixed; top: 20px; left: 20px; padding: 10px 16px; border-radius: 999px; background: linear-gradient(135deg, #ff3b30, #00e5ff); color: #fff; text-decoration: none; font-weight: 700; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">Home</a>
     <div class="grid">
+        <!-- data-channel-id ist für Kanäle mit einer definierten Channel-ID nötig -->
         <button type="button" onclick="window.open('https://youtube.com/@craftmir?si=nRWNBR7qw0ZIgc6w', '_blank')">
             <img src="https://yt3.googleusercontent.com/e7Nn9vyQHColL-OhEyW8ONBs6XGYJWFpZ6ZhhUqY7V34QdbThe5qymGbnR6deZE6O44D-bwS=s160-c-k-c0x00ffffff-no-rj" alt="Amir">
             Amir
@@ -136,7 +152,7 @@
             ICrimax
         </button>
         <button type="button" onclick="window.open('https://www.youtube.com/@DanergyyHD', '_blank')">
-            <img src="https://yt3.googleusercontent.com/tTl91DWk_kZEQUOcJKW1ZxcpEcpbJjhTKpmz9biRDS9KycnfLsPL1XusJX_2E_prkARLLBt3_g4=s160-c-k-c0x00ffffff-no-rj" alt="DanergyyHD">
+            <img src="https://yt3.googleusercontent.com/tTl91DWk_kZEQUOcJKW1ZxcpEcpbJjhTKpmz9biRDSKycnfLsPL1XusJX_2E_prkARLLBt3_g4=s160-c-k-c0x00ffffff-no-rj" alt="DanergyyHD">
             DanergyyHD
         </button>
         <button type="button" onclick="window.open('https://www.youtube.com/@schmockyyyMC', '_blank')">
@@ -159,7 +175,7 @@
             <img src="https://yt3.googleusercontent.com/ytc/AIdro_nuuwzcEMBAX3JyfU5vu8bMvxN9dzGTYL-dcwgRhh-_21E=s160-c-k-c0x00ffffff-no-rj" alt="AwesomeElina">
             AwesomeElina
         </button>
-        <button type="button" onclick="window.open('https://www.youtube.com/channel/UCJubjtE-Jt7p2levpGUWpog', '_blank')">
+        <button type="button" data-channel-id="UCJubjtE-Jt7p2levpGUWpog" onclick="window.open('https://www.youtube.com/channel/UCJubjtE-Jt7p2levpGUWpog', '_blank')">
             <img src="https://yt3.googleusercontent.com/ytc/AIdro_n4pF5qwvbIddBbFO-ZyZmOS-qvWbad9pBVoVrc4-MbHRM=s160-c-k-c0x00ffffff-no-rj" alt="Ryan Cole">
             Ryan Cole
         </button>
@@ -171,7 +187,7 @@
             <img src="https://yt3.googleusercontent.com/Axqiz93CsydZ4iFk-4PZ80_BU4kDlvVbSpUiUF1azlbxl13vgSWKYBaZe8V_K08vpP5r4BKnC1Y=s160-c-k-c0x00ffffff-no-rj" alt="Alphastein">
             Alphastein
         </button>
-        <button type="button" onclick="window.open('https://www.youtube.com/channel/UCUxYF--pUjEXxLQAqQZuphg', '_blank')">
+        <button type="button" data-channel-id="UCUxYF--pUjEXxLQAqQZuphg" onclick="window.open('https://www.youtube.com/channel/UCUxYF--pUjEXxLQAqQZuphg', '_blank')">
             <img src="https://yt3.googleusercontent.com/ytc/AIdro_l4vj3w5DdkaWhml_G-KzHzALuU25FPZ9yP5YkqlEjVrQ=s160-c-k-c0x00ffffff-no-rj" alt="Eiti">
             Eiti
         </button>
@@ -205,6 +221,7 @@
         </button>
     </div>
     <script>
+        // Herz-Logik & Punkt-Initialisierung
         document.querySelectorAll('.grid button').forEach((button, index) => {
             const key = `heart-${index}`;
             button.querySelector('.heart')?.remove();
@@ -246,7 +263,57 @@
                 button.appendChild(heart);
                 button.appendChild(toggle);
             }
+
+            // Prüfe beim Laden auf neue Videos
+            checkNewVideo(button);
         });
+
+        // Abfrage-Funktion für neu hochgeladene Videos
+        async function checkNewVideo(button) {
+            let rssUrl = '';
+            const channelId = button.getAttribute('data-channel-id');
+            const onclickAttr = button.getAttribute('onclick') || '';
+            const matchUrl = onclickAttr.match(/'([^']+)'/);
+            
+            if (!matchUrl) return;
+            const link = matchUrl[1];
+
+            if (channelId) {
+                rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
+            } else if (link.includes('/@')) {
+                const handle = link.split('/@')[1].split('?')[0];
+                rssUrl = `https://www.youtube.com/feeds/videos.xml?user=${handle}`;
+            } else if (link.includes('/user/')) {
+                const user = link.split('/user/')[1].split('?')[0];
+                rssUrl = `https://www.youtube.com/feeds/videos.xml?user=${user}`;
+            }
+
+            if (!rssUrl) return;
+
+            try {
+                // RSS2JSON API wandelt den YouTube-Feed in verarbeitbares JSON um
+                const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`);
+                const data = await res.json();
+
+                if (data.status === 'ok' && data.items && data.items.length > 0) {
+                    const latestVideo = data.items[0];
+                    const pubDate = new Date(latestVideo.pubDate).getTime();
+                    const now = new Date().getTime();
+                    
+                    // Zeitfenster in Stunden für "neues Video" (hier 24 Stunden)
+                    const hoursDiff = (now - pubDate) / (1000 * 60 * 60);
+
+                    if (hoursDiff <= 24) {
+                        const dot = document.createElement('div');
+                        dot.className = 'new-badge';
+                        dot.title = `Neues Video: ${latestVideo.title}`;
+                        button.appendChild(dot);
+                    }
+                }
+            } catch (e) {
+                // Stille Fehlerbehandlung bei Abfragebeschränkungen
+            }
+        }
     </script>
 </body>
 </html>
