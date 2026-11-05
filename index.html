@@ -37,6 +37,39 @@
             z-index: 2;
         }
 
+        /* Fliegender Weihnachtsmann mit Schlitten & Rentieren */
+        .santa-sleigh {
+            position: fixed;
+            top: 15%;
+            left: -250px;
+            font-size: 2.2rem;
+            white-space: nowrap;
+            pointer-events: none;
+            z-index: 1;
+            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.4));
+            animation: flySanta 18s linear infinite;
+        }
+
+        @keyframes flySanta {
+            0% {
+                left: -250px;
+                transform: translateY(0) rotate(2deg);
+            }
+            25% {
+                transform: translateY(-20px) rotate(-1deg);
+            }
+            50% {
+                transform: translateY(10px) rotate(3deg);
+            }
+            75% {
+                transform: translateY(-15px) rotate(0deg);
+            }
+            100% {
+                left: calc(100vw + 250px);
+                transform: translateY(0) rotate(2deg);
+            }
+        }
+
         body::before {
             content: "";
             position: absolute;
@@ -480,6 +513,9 @@
 
     <!-- Animierter Schneefall Canvas -->
     <canvas id="snowCanvas"></canvas>
+
+    <!-- Fliegender Weihnachtsmann im Hintergrund -->
+    <div class="santa-sleigh">🦌 🦌 🛷 🎅 ✨</div>
 
     <!-- ================= LOGIN / REGISTER OVERLAY ================= -->
     <div id="authOverlay">
