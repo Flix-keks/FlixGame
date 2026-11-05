@@ -1,319 +1,469 @@
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            background: linear-gradient(135deg, #850294, #378dff, #00e5ff);
-            color: white;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prod by FlixGames 🎄</title>
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 12px;
-            width: min(1000px, 100%);
-        }
+<style>
+* {
+    box-sizing: border-box;
+}
 
-        button {
-            position: relative; /* Wichtig für die Positionierung des roten Punktes */
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 12px;
-            border: none;
-            border-radius: 14px;
-            background: linear-gradient(135deg, #00ff59, #0dff92, #77acf7);
-            color: #fff;
-            cursor: pointer;
-            font-weight: 600;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: linear-gradient(135deg, #850294, #378dff, #00e5ff);
+    color: white;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
 
-        /* Roter Punkt Badge */
-        .new-badge {
-            position: absolute;
-            top: -4px;
-            right: -4px;
-            width: 12px;
-            height: 12px;
-            background-color: #ff0000;
-            border: 2px solid #ffffff;
-            border-radius: 50%;
-            box-shadow: 0 0 8px rgba(255, 0, 0, 0.8);
-            z-index: 10;
-        }
+/* Schneefall */
+.snow {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+}
 
-        .heart-toggle {
-            margin-left: auto;
-            font-size: 1rem;
-            color: #ff4d4d;
-            cursor: pointer;
-            user-select: none;
-            transition: transform 0.2s ease;
-        }
+.snowflake {
+    position: absolute;
+    top: -30px;
+    color: white;
+    opacity: 0.9;
+    animation: snowfall linear infinite;
+}
 
-        .heart-toggle:hover {
-            transform: scale(1.1);
-        }
+@keyframes snowfall {
+    to {
+        transform: translateY(110vh) rotate(360deg);
+    }
+}
 
-        .heart-icon {
-            margin-left: 6px;
-            font-size: 1rem;
-            color: #ff4d4d;
-            text-shadow: 0 0 8px rgba(255,77,77,0.8);
-        }
+/* Weihnachtsmann */
+.santa {
+    position: fixed;
+    top: 12%;
+    left: -450px;
+    z-index: 2;
+    white-space: nowrap;
+    font-size: 48px;
+    filter: drop-shadow(0 0 10px white);
+    animation: santaRide 18s linear infinite;
+    pointer-events: none;
+}
 
-        .heart-icon.hidden {
-            display: none;
-        }
+@keyframes santaRide {
+    0% {
+        left: -450px;
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-25px);
+    }
+    100% {
+        left: 110%;
+        transform: translateY(10px);
+    }
+}
 
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 18px rgba(0,0,0,0.25);
-        }
+/* Inhalt */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    width: min(1000px, 100%);
+    position: relative;
+    z-index: 3;
+}
 
-        button img {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            object-fit: cover;
-            flex-shrink: 0;
-        }
+button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #00ff59, #0dff92, #77acf7);
+    color: #fff;
+    cursor: pointer;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
 
-        h1 {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            margin: 0;
-            font-size: 2rem;
-            color: #00e5ff;
-            text-shadow: 0 0 12px rgba(0,229,255,0.5);
-        }
-    </style>
+.new-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 12px;
+    height: 12px;
+    background-color: #ff0000;
+    border: 2px solid white;
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(255,0,0,0.8);
+    z-index: 10;
+}
+
+.heart-toggle {
+    margin-left: auto;
+    font-size: 1rem;
+    color: #ff4d4d;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.2s ease;
+}
+
+.heart-toggle:hover {
+    transform: scale(1.1);
+}
+
+.heart-icon {
+    margin-left: 6px;
+    font-size: 1rem;
+    color: #ff4d4d;
+    text-shadow: 0 0 8px rgba(255,77,77,0.8);
+}
+
+.heart-icon.hidden {
+    display: none;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.25);
+}
+
+button img {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+h1 {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
+    font-size: 2rem;
+    color: #00e5ff;
+    text-shadow: 0 0 12px rgba(0,229,255,0.5);
+    z-index: 4;
+}
+
+.home {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #ff3b30, #00e5ff);
+    color: white;
+    text-decoration: none;
+    font-weight: 700;
+    z-index: 5;
+}
+
+@media(max-width: 600px) {
+    h1 {
+        font-size: 1.4rem;
+        top: 75px;
+    }
+
+    .santa {
+        font-size: 32px;
+    }
+
+    .grid {
+        margin-top: 100px;
+    }
+}
+</style>
 </head>
+
 <body>
-    <h1>Prod by FlixGames</h1>
-    <a href="index.html" style="position: fixed; top: 20px; left: 20px; padding: 10px 16px; border-radius: 999px; background: linear-gradient(135deg, #ff3b30, #00e5ff); color: #fff; text-decoration: none; font-weight: 700; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">Home</a>
-    <div class="grid">
-        <!-- data-channel-id ist für Kanäle mit einer definierten Channel-ID nötig -->
-        <button type="button" onclick="window.open('https://youtube.com/@craftmir?si=nRWNBR7qw0ZIgc6w', '_blank')">
-            <img src="https://yt3.googleusercontent.com/e7Nn9vyQHColL-OhEyW8ONBs6XGYJWFpZ6ZhhUqY7V34QdbThe5qymGbnR6deZE6O44D-bwS=s160-c-k-c0x00ffffff-no-rj" alt="Amir">
-            Amir
-            <span class="heart">♥</span>
-        </button>
-        <button type="button" onclick="window.open('https://www.youtube.com/@SYou', '_blank')">
-            <img src="https://yt3.googleusercontent.com/ytc/AIdro_lwhyE88NXJ7IIBeXXBq7bWyIwYzMJVKdQvUDgncf6Vtg=s160-c-k-c0x00ffffff-no-rj" alt="Syou">
-            Syou
-            <span class="heart">♥</span>
-        </button>
-        <button type="button" onclick="window.open('https://www.youtube.com/@OfficialYami_', '_blank')">
-            <img src="https://yt3.googleusercontent.com/UtMxKw-MZZg_pAWFEuyk_nust5_C0454jFdSaNClfEVH_zj3HJkIZt0jmx16XCcfQyX3NSrCbJA=s160-c-k-c0x00ffffff-no-rj" alt="Yami">
-            Yami
-        </button>
-        <button type="button" onclick="window.open('https://www.youtube.com/@TriDanReal', '_blank')">
-            <img src="https://yt3.ggpht.com/ZYQo1bDfjwAjAb6y_QydJG18GsSvIGLEdIwT0BqJhLU8Qzz4teX9V2dYusENyTLMQPcATwWwgw=s176-c-k-c0x00ffffff-no-rj-mo" alt="Tridan">
-            Tridan
-        </button>
-        <button type="button" onclick="window.open('https://www.youtube.com/@platin6', '_blank')">
-            <img src="https://yt3.ggpht.com/fCnuf6zKb7L7S1yTs53HClqUCbXNumBtUeVJlk0LdduFA_0jWDDyQwMFE-N7qpznQmv-izgNsB4=s176-c-k-c0x00ffffff-no-rj-mo" alt="Platin">
-            Platin
-        </button>
-        <button type="button" onclick="window.open('https://www.youtube.com/@AviveHD', '_blank')">
-            <img src="https://yt3.ggpht.com/eiHpSHCiW-YWP97zzn423TEA75k5z_0qPIRzbefCQJODxEhvC3l3biSrtDbxGi1GH3vfnMCZaus=s68-c-k-c0x00ffffff-no-rj" alt="AviveHD">
-            AviveHD
-        </button>
-        <button type="button" onclick="window.open('https://www.youtube.com/@xzitachi', '_blank')">
-            <img src="https://yt3.ggpht.com/35jEqwqAtPaz08F9xDfHFDlOfr-JtEg0uu2ISxHywVzB_EcXF5yzUDUD_OweQ7dSSLI82aa0=s176-c-k-c0x00ffffff-no-rj-mo" alt="Zitachi">
-            Zitachi
-        </button>
-        <button type="button" onclick="window.open('https://www.youtube.com/@ojichristosTV', '_blank')">
-            <img src="https://yt3.googleusercontent.com/3BVSiqWEl8nvtt7HtbCFzQQtZHjlkOJSwZ7m_kjbMA-5EFDtCXdsFOaol9_qz_B8tSxCU2X1=s160-c-k-c0x00ffffff-no-rj" alt="Ojichristos">
-            Ojichristos
-        </button>
-        <button type="button" onclick="window.open('https://www.youtube.com/@kiyanesh', '_blank')">
-            <img src="https://yt3.googleusercontent.com/Q8o2q9OjvuJ2-N60FfKhyWl0ZnPO3mx8vucWEyYjxhqZ4vfLWzdTfv8VW-JSfZY28uXu7UUk2A=s160-c-k-c0x00ffffff-no-rj" alt="Kiyanesh">
-            Kiyanesh
-        </button>
-        <button type="button" onclick="window.open('https://www.youtube.com/@iCrimax', '_blank')">
-            <img src="https://yt3.googleusercontent.com/ytc/AIdro_k2IrEeYOP1Y6t1sxAqoQfT2E0Z2qsJT6xwGyPKs5R0XiE=s160-c-k-c0x00ffffff-no-rj" alt="ICrimax">
-            ICrimax
-        </button>
-        <button type="button" onclick="window.open('https://www.youtube.com/@DanergyyHD', '_blank')">
-            <img src="https://yt3.googleusercontent.com/tTl91DWk_kZEQUOcJKW1ZxcpEcpbJjhTKpmz9biRDSKycnfLsPL1XusJX_2E_prkARLLBt3_g4=s160-c-k-c0x00ffffff-no-rj" alt="DanergyyHD">
-            DanergyyHD
-        </button>
-        <button type="button" onclick="window.open('https://www.youtube.com/@schmockyyyMC', '_blank')">
-            <img src="https://yt3.googleusercontent.com/y2x7eNHYLR_6AK8dbcUwAPZt8m31ZW8D9AN6WJPzzRupLl2ALjhfHDg2GXkl5fwCSEJGKJQp=s160-c-k-c0x00ffffff-no-rj" alt="SchmockyyyMC">
-            SchmockyyyMC
-        </button>
-        <button type="button" onclick="window.open('https://www.youtube.com/@ryney', '_blank')">
-            <img src="https://yt3.googleusercontent.com/NpHDQoxzcIFDPGFJbpx3t2wPsh6Prjv6IBYPeV4iVFAyF16w_1Pf5mPVQo5O6GWt1SI91Wq7Wg=s160-c-k-c0x00ffffff-no-rj" alt="Ryney">
-            Ryney
-        </button>
-        <button type="button" onclick="window.open('https://www.youtube.com/@zQZack', '_blank')">
-            <img src="https://yt3.googleusercontent.com/ZomdC6d5u8RdxHRMCiug9uCbvJcSakUxOhNZ1j_hJlf984pumwI1bGZ_T4M3HYHiGJIJRnUn=s160-c-k-c0x00ffffff-no-rj" alt="ZQZack">
-            ZQZack
-        </button>
-        <button type="button" onclick="window.open('https://www.youtube.com/@LiveLuc', '_blank')">
-            <img src="https://yt3.googleusercontent.com/8MTTtahRhI4T6TWjfvc8jf-6A4sAp8pHU0ttMl1sdZudHIA_TRLzeB-FeT8yG8JvGMIm4nwNsA=s160-c-k-c0x00ffffff-no-rj" alt="LiveLuc">
-            LiveLuc
-        </button>
-        <button type="button" onclick="window.open('https://www.youtube.com/@Elinski', '_blank')">
-            <img src="https://yt3.googleusercontent.com/ytc/AIdro_nuuwzcEMBAX3JyfU5vu8bMvxN9dzGTYL-dcwgRhh-_21E=s160-c-k-c0x00ffffff-no-rj" alt="AwesomeElina">
-            AwesomeElina
-        </button>
-        <button type="button" data-channel-id="UCJubjtE-Jt7p2levpGUWpog" onclick="window.open('https://www.youtube.com/channel/UCJubjtE-Jt7p2levpGUWpog', '_blank')">
-            <img src="https://yt3.googleusercontent.com/ytc/AIdro_n4pF5qwvbIddBbFO-ZyZmOS-qvWbad9pBVoVrc4-MbHRM=s160-c-k-c0x00ffffff-no-rj" alt="Ryan Cole">
-            Ryan Cole
-        </button>
-        <button type="button" onclick="window.open('https://www.youtube.com/user/GommeHD', '_blank')">
-            <img src="https://yt3.googleusercontent.com/ytc/AIdro_mEKREHy1OJjTVHmbLZj0K5hjS-bnzzQJRSz5_fV1xETU4=s160-c-k-c0x00ffffff-no-rj" alt="GommeHD">
-            GommeHD
-        </button>
-        <button type="button" onclick="window.open('https://www.youtube.com/@Alphastein', '_blank')">
-            <img src="https://yt3.googleusercontent.com/Axqiz93CsydZ4iFk-4PZ80_BU4kDlvVbSpUiUF1azlbxl13vgSWKYBaZe8V_K08vpP5r4BKnC1Y=s160-c-k-c0x00ffffff-no-rj" alt="Alphastein">
-            Alphastein
-        </button>
-        <button type="button" data-channel-id="UCUxYF--pUjEXxLQAqQZuphg" onclick="window.open('https://www.youtube.com/channel/UCUxYF--pUjEXxLQAqQZuphg', '_blank')">
-            <img src="https://yt3.googleusercontent.com/ytc/AIdro_l4vj3w5DdkaWhml_G-KzHzALuU25FPZ9yP5YkqlEjVrQ=s160-c-k-c0x00ffffff-no-rj" alt="Eiti">
-            Eiti
-        </button>
-        <button type="button" onclick="window.open('https://www.youtube.com/@Harotte', '_blank')">
-            <img src="https://yt3.googleusercontent.com/CHSqTvWi7YYZpPZSL2YzV7os4rPoKKYnjH3R0u_FDMGp7aTfqEJw3Tyghhq0BpwEzQnVKiSU=s160-c-k-c0x00ffffff-no-rj" alt="Harotte">
-            Harotte
-        </button>
-        <button type="button" onclick="window.open('https://www.youtube.com/@JoGamesYT', '_blank')">
-            <img src="https://yt3.googleusercontent.com/b7a7jQkb4HagRvcOv-tmSugqlI_tqWHnnJeWzFcxyrOCnXw0sRuNP9sfFhpXGjx6DNA2sRclW10=s160-c-k-c0x00ffffff-no-rj" alt="JoGames">
-            JoGames
-        </button>
-        <button type="button" onclick="window.open('https://www.youtube.com/@kentrecote', '_blank')">
-            <img src="https://yt3.googleusercontent.com/stheJ_VjC6mwwuHj27juu_gETmfKFElClh8-RwqOZBXpQqYAyL4pqO3-OBCoP_kGaBIEWVtF9EY=s160-c-k-c0x00ffffff-no-rj" alt="Ken">
-            Ken
-        </button>
-        <button type="button" onclick="window.open('https://www.youtube.com/@KrustiBurger', '_blank')">
-            <img src="https://yt3.googleusercontent.com/SCGSLt4FmVusrbjvQtNL1AgBu2iHZFCi5eftPqr9iguWFTbfFCCB-UF0MIt5skByl7lb_0Bgy8Q=s160-c-k-c0x00ffffff-no-rj" alt="Krusti">
-            Krusti
-        </button>
-        <button type="button" onclick="window.open('https://www.youtube.com/@blackchecktv', '_blank')">
-            <img src="https://yt3.googleusercontent.com/Fgz7UJUmzB5c7XLXX4o81jhsfvNCEW2D_Pcg0DycQC9j09SiXEEm0hCtwh90Eb0AWU9Dt6sK=s160-c-k-c0x00ffffff-no-rj" alt="BlackCheck">
-            BlackCheck
-        </button>
-        <button type="button" onclick="window.open('https://www.youtube.com/@Ente', '_blank')">
-            <img src="https://yt3.googleusercontent.com/tmTqq1RZ6rNMuOi-AnOukpqB94CVu7YVf7jgS59eUDIVwzG921NPsp3Kl7Ng-V8CNSs3u7Nx23E=s160-c-k-c0x00ffffff-no-rj" alt="Ente">
-            Ente
-        </button>
-        <button type="button" onclick="window.open('https://www.youtube.com/@BrostasticTV', '_blank')">
-            <img src="https://yt3.googleusercontent.com/NFwHpWPSrQXSvmEKzCKUKuVkLpR74nGkkcU8OsA3GaOULrTQnl-dVyn-q5iCDYtPVaqbLQXl=s160-c-k-c0x00ffffff-no-rj" alt="Brostastic">
-            Brostastic
-        </button>
-    </div>
-    <script>
-        // Herz-Logik & Punkt-Initialisierung
-        document.querySelectorAll('.grid button').forEach((button, index) => {
-            const key = `heart-${index}`;
-            button.querySelector('.heart')?.remove();
 
-            if (!button.querySelector('.heart-toggle')) {
-                const toggle = document.createElement('span');
-                toggle.className = 'heart-toggle';
-                toggle.textContent = '♡';
-                toggle.setAttribute('role', 'button');
-                toggle.setAttribute('tabindex', '0');
-                toggle.setAttribute('aria-label', 'Herz hinzufügen oder entfernen');
+<!-- Schnee -->
+<div class="snow" id="snow"></div>
 
-                const heart = document.createElement('span');
-                heart.className = 'heart-icon hidden';
-                heart.textContent = '♥';
+<!-- Weihnachtsmann mit Rentieren -->
+<div class="santa">
+    🦌 🦌 🦌 🦌 🎅🛷
+</div>
 
-                const saved = localStorage.getItem(key) === 'true';
-                if (saved) {
-                    heart.classList.remove('hidden');
-                    toggle.textContent = '♥';
-                }
+<h1>🎄 Prod by FlixGames 🎄</h1>
 
-                toggle.addEventListener('click', (event) => {
-                    event.stopPropagation();
-                    event.preventDefault();
-                    const active = toggle.classList.toggle('active');
-                    heart.classList.toggle('hidden', !active);
-                    toggle.textContent = active ? '♥' : '♡';
-                    localStorage.setItem(key, String(active));
-                });
+<a href="index.html" class="home">Home</a>
 
-                toggle.addEventListener('keydown', (event) => {
-                    if (event.key === 'Enter' || event.key === ' ') {
-                        event.preventDefault();
-                        toggle.click();
-                    }
-                });
+<div class="grid">
 
-                button.appendChild(heart);
-                button.appendChild(toggle);
-            }
+<!-- YouTube Kanäle -->
 
-            // Prüfe beim Laden auf neue Videos
-            checkNewVideo(button);
+<button type="button" onclick="window.open('https://youtube.com/@craftmir?si=nRWNBR7qw0ZIgc6w', '_blank')">
+<img src="https://yt3.googleusercontent.com/e7Nn9vyQHColL-OhEyW8ONBs6XGYJWFpZ6ZhhUqY7V34QdbThe5qymGbnR6deZE6O44D-bwS=s160-c-k-c0x00ffffff-no-rj" alt="Amir">
+Amir
+</button>
+
+<button type="button" onclick="window.open('https://www.youtube.com/@SYou', '_blank')">
+<img src="https://yt3.googleusercontent.com/ytc/AIdro_lwhyE88NXJ7IIBeXXBq7bWyIwYzMJVKdQvUDgncf6Vtg=s160-c-k-c0x00ffffff-no-rj" alt="Syou">
+Syou
+</button>
+
+<button type="button" onclick="window.open('https://www.youtube.com/@OfficialYami_', '_blank')">
+<img src="https://yt3.googleusercontent.com/UtMxKw-MZZg_pAWFEuyk_nust5_C0454jFdSaNClfEVH_zj3HJkIZt0jmx16XCcfQyX3NSrCbJA=s160-c-k-c0x00ffffff-no-rj" alt="Yami">
+Yami
+</button>
+
+<button type="button" onclick="window.open('https://www.youtube.com/@TriDanReal', '_blank')">
+<img src="https://yt3.ggpht.com/ZYQo1bDfjwAjAb6y_QydJG18GsSvIGLEdIwT0BqJhLU8Qzz4teX9V2dYusENyTLMQPcATwWwgw=s176-c-k-c0x00ffffff-no-rj-mo" alt="Tridan">
+Tridan
+</button>
+
+<button type="button" onclick="window.open('https://www.youtube.com/@platin6', '_blank')">
+<img src="https://yt3.ggpht.com/fCnuf6zKb7L7S1yTs53HClqUCbXNumBtUeVJlk0LdduFA_0jWDDyQwMFE-N7qpznQmv-izgNsB4=s176-c-k-c0x00ffffff-no-rj-mo" alt="Platin">
+Platin
+</button>
+
+<button type="button" onclick="window.open('https://www.youtube.com/@AviveHD', '_blank')">
+<img src="https://yt3.ggpht.com/eiHpSHCiW-YWP97zzn423TEA75k5z_0qPIRzbefCQJODxEhvC3l3biSrtDbxGi1GH3vfnMCZaus=s68-c-k-c0x00ffffff-no-rj" alt="AviveHD">
+AviveHD
+</button>
+
+<button type="button" onclick="window.open('https://www.youtube.com/@xzitachi', '_blank')">
+<img src="https://yt3.ggpht.com/35jEqwqAtPaz08F9xDfHFDlOfr-JtEg0uu2ISxHywVzB_EcXF5yzUDUD_OweQ7dSSLI82aa0=s176-c-k-c0x00ffffff-no-rj-mo" alt="Zitachi">
+Zitachi
+</button>
+
+<button type="button" onclick="window.open('https://www.youtube.com/@ojichristosTV', '_blank')">
+<img src="https://yt3.googleusercontent.com/3BVSiqWEl8nvtt7HtbCFzQQtZHjlkOJSwZ7m_kjbMA-5EFDtCXdsFOaol9_qz_B8tSxCU2X1=s160-c-k-c0x00ffffff-no-rj" alt="Ojichristos">
+Ojichristos
+</button>
+
+<button type="button" onclick="window.open('https://www.youtube.com/@kiyanesh', '_blank')">
+<img src="https://yt3.googleusercontent.com/Q8o2q9OjvuJ2-N60FfKhyWl0ZnPO3mx8vucWEyYjxhqZ4vfLWzdTfv8VW-JSfZY28uXu7UUk2A=s160-c-k-c0x00ffffff-no-rj" alt="Kiyanesh">
+Kiyanesh
+</button>
+
+<button type="button" onclick="window.open('https://www.youtube.com/@iCrimax', '_blank')">
+<img src="https://yt3.googleusercontent.com/ytc/AIdro_k2IrEeYOP1Y6t1sxAqoQfT2E0Z2qsJT6xwGyPKs5R0XiE=s160-c-k-c0x00ffffff-no-rj" alt="ICrimax">
+ICrimax
+</button>
+
+<button type="button" onclick="window.open('https://www.youtube.com/@DanergyyHD', '_blank')">
+<img src="https://yt3.googleusercontent.com/tTl91DWk_kZEQUOcJKW1ZxcpEcpbJjhTKpmz9biRDSKycnfLsPL1XusJX_2E_prkARLLBt3_g4=s160-c-k-c0x00ffffff-no-rj" alt="DanergyyHD">
+DanergyyHD
+</button>
+
+<button type="button" onclick="window.open('https://www.youtube.com/@schmockyyyMC', '_blank')">
+<img src="https://yt3.googleusercontent.com/y2x7eNHYLR_6AK8dbcUwAPZt8m31ZW8D9AN6WJPzzRupLl2ALjhfHDg2GXkl5fwCSEJGKJQp=s160-c-k-c0x00ffffff-no-rj" alt="SchmockyyyMC">
+SchmockyyyMC
+</button>
+
+<button type="button" onclick="window.open('https://www.youtube.com/@ryney', '_blank')">
+<img src="https://yt3.googleusercontent.com/NpHDQoxzcIFDPGFJbpx3t2wPsh6Prjv6IBYPeV4iVFAyF16w_1Pf5mPVQo5O6GWt1SI91Wq7Wg=s160-c-k-c0x00ffffff-no-rj" alt="Ryney">
+Ryney
+</button>
+
+<button type="button" onclick="window.open('https://www.youtube.com/@zQZack', '_blank')">
+<img src="https://yt3.googleusercontent.com/ZomdC6d5u8RdxHRMCiug9uCbvJcSakUxOhNZ1j_hJlf984pumwI1bGZ_T4M3HYHiGJIJRnUn=s160-c-k-c0x00ffffff-no-rj" alt="ZQZack">
+ZQZack
+</button>
+
+<button type="button" onclick="window.open('https://www.youtube.com/@LiveLuc', '_blank')">
+<img src="https://yt3.googleusercontent.com/8MTTtahRhI4T6TWjfvc8jf-6A4sAp8pHU0ttMl1sdZudHIA_TRLzeB-FeT8yG8JvGMIm4nwNsA=s160-c-k-c0x00ffffff-no-rj" alt="LiveLuc">
+LiveLuc
+</button>
+
+<button type="button" onclick="window.open('https://www.youtube.com/@Elinski', '_blank')">
+<img src="https://yt3.googleusercontent.com/ytc/AIdro_nuuwzcEMBAX3JyfU5vu8bMvxN9dzGTYL-dcwgRhh-_21E=s160-c-k-c0x00ffffff-no-rj" alt="AwesomeElina">
+AwesomeElina
+</button>
+
+<button type="button" data-channel-id="UCJubjtE-Jt7p2levpGUWpog" onclick="window.open('https://www.youtube.com/channel/UCJubjtE-Jt7p2levpGUWpog', '_blank')">
+<img src="https://yt3.googleusercontent.com/ytc/AIdro_n4pF5qwvbIddBbFO-ZyZmOS-qvWbad9pBVoVrc4-MbHRM=s160-c-k-c0x00ffffff-no-rj" alt="Ryan Cole">
+Ryan Cole
+</button>
+
+<button type="button" onclick="window.open('https://www.youtube.com/user/GommeHD', '_blank')">
+<img src="https://yt3.googleusercontent.com/ytc/AIdro_mEKREHy1OJjTVHmbLZj0K5hjS-bnzzQJRSz5_fV1xETU4=s160-c-k-c0x00ffffff-no-rj" alt="GommeHD">
+GommeHD
+</button>
+
+<button type="button" onclick="window.open('https://www.youtube.com/@Alphastein', '_blank')">
+<img src="https://yt3.googleusercontent.com/Axqiz93CsydZ4iFk-4PZ80_BU4kDlvVbSpUiUF1azlbxl13vgSWKYBaZe8V_K08vpP5r4BKnC1Y=s160-c-k-c0x00ffffff-no-rj" alt="Alphastein">
+Alphastein
+</button>
+
+<button type="button" data-channel-id="UCUxYF--pUjEXxLQAqQZuphg" onclick="window.open('https://www.youtube.com/channel/UCUxYF--pUjEXxLQAqQZuphg', '_blank')">
+<img src="https://yt3.googleusercontent.com/ytc/AIdro_l4vj3w5DdkaWhml_G-KzHzALuU25FPZ9yP5YkqlEjVrQ=s160-c-k-c0x00ffffff-no-rj" alt="Eiti">
+Eiti
+</button>
+
+<button type="button" onclick="window.open('https://www.youtube.com/@Harotte', '_blank')">
+<img src="https://yt3.googleusercontent.com/CHSqTvWi7YYZpPZSL2YzV7os4rPoKKYnjH3R0u_FDMGp7aTfqEJw3Tyghhq0BpwEzQnVKiSU=s160-c-k-c0x00ffffff-no-rj" alt="Harotte">
+Harotte
+</button>
+
+<button type="button" onclick="window.open('https://www.youtube.com/@JoGamesYT', '_blank')">
+<img src="https://yt3.googleusercontent.com/b7a7jQkb4HagRvcOv-tmSugqlI_tqWHnnJeWzFcxyrOCnXw0sRuNP9sfFhpXGjx6DNA2sRclW10=s160-c-k-c0x00ffffff-no-rj" alt="JoGames">
+JoGames
+</button>
+
+<button type="button" onclick="window.open('https://www.youtube.com/@kentrecote', '_blank')">
+<img src="https://yt3.googleusercontent.com/stheJ_VjC6mwwuHj27juu_gETmfKFElClh8-RwqOZBXpQqYAyL4pqO3-OBCoP_kGaBIEWVtF9EY=s160-c-k-c0x00ffffff-no-rj" alt="Ken">
+Ken
+</button>
+
+<button type="button" onclick="window.open('https://www.youtube.com/@KrustiBurger', '_blank')">
+<img src="https://yt3.googleusercontent.com/SCGSLt4FmVusrbjvQtNL1AgBu2iHZFCi5eftPqr9iguWFTbfFCCB-UF0MIt5skByl7lb_0Bgy8Q=s160-c-k-c0x00ffffff-no-rj" alt="Krusti">
+Krusti
+</button>
+
+<button type="button" onclick="window.open('https://www.youtube.com/@blackchecktv', '_blank')">
+<img src="https://yt3.googleusercontent.com/Fgz7UJUmzB5c7XLXX4o81jhsfvNCEW2D_Pcg0DycQC9j09SiXEEm0hCtwh90Eb0AWU9Dt6sK=s160-c-k-c0x00ffffff-no-rj" alt="BlackCheck">
+BlackCheck
+</button>
+
+<button type="button" onclick="window.open('https://www.youtube.com/@Ente', '_blank')">
+<img src="https://yt3.googleusercontent.com/tmTqq1RZ6rNMuOi-AnOukpqB94CVu7YVf7jgS59eUDIVwzG921NPsp3Kl7Ng-V8CNSs3u7Nx23E=s160-c-k-c0x00ffffff-no-rj" alt="Ente">
+Ente
+</button>
+
+<button type="button" onclick="window.open('https://www.youtube.com/@BrostasticTV', '_blank')">
+<img src="https://yt3.googleusercontent.com/NFwHpWPSrQXSvmEKzCKUKuVkLpR74nGkkcU8OsA3GaOULrTQnl-dVyn-q5iCDYtPVaqbLQXl=s160-c-k-c0x00ffffff-no-rj" alt="Brostastic">
+Brostastic
+</button>
+
+</div>
+
+<script>
+// Schnee erzeugen
+const snow = document.getElementById("snow");
+
+for (let i = 0; i < 100; i++) {
+    const flake = document.createElement("div");
+
+    flake.className = "snowflake";
+    flake.textContent = "❄";
+    flake.style.left = Math.random() * 100 + "%";
+    flake.style.fontSize = (Math.random() * 15 + 8) + "px";
+    flake.style.animationDuration = (Math.random() * 8 + 5) + "s";
+    flake.style.animationDelay = Math.random() * 10 + "s";
+
+    snow.appendChild(flake);
+}
+
+// Herz-Logik & Punkt-Initialisierung
+document.querySelectorAll('.grid button').forEach((button, index) => {
+    const key = `heart-${index}`;
+    button.querySelector('.heart')?.remove();
+
+    if (!button.querySelector('.heart-toggle')) {
+        const toggle = document.createElement('span');
+        toggle.className = 'heart-toggle';
+        toggle.textContent = '♡';
+        toggle.setAttribute('role', 'button');
+        toggle.setAttribute('tabindex', '0');
+        toggle.setAttribute('aria-label', 'Herz hinzufügen oder entfernen');
+
+        const heart = document.createElement('span');
+        heart.className = 'heart-icon hidden';
+        heart.textContent = '♥';
+
+        const saved = localStorage.getItem(key) === 'true';
+
+        if (saved) {
+            heart.classList.remove('hidden');
+            toggle.textContent = '♥';
+            toggle.classList.add('active');
+        }
+
+        toggle.addEventListener('click', (event) => {
+            event.stopPropagation();
+            event.preventDefault();
+
+            const active = toggle.classList.toggle('active');
+            heart.classList.toggle('hidden', !active);
+            toggle.textContent = active ? '♥' : '♡';
+
+            localStorage.setItem(key, String(active));
         });
 
-        // Abfrage-Funktion für neu hochgeladene Videos
-        async function checkNewVideo(button) {
-            let rssUrl = '';
-            const channelId = button.getAttribute('data-channel-id');
-            const onclickAttr = button.getAttribute('onclick') || '';
-            const matchUrl = onclickAttr.match(/'([^']+)'/);
-            
-            if (!matchUrl) return;
-            const link = matchUrl[1];
-
-            if (channelId) {
-                rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
-            } else if (link.includes('/@')) {
-                const handle = link.split('/@')[1].split('?')[0];
-                rssUrl = `https://www.youtube.com/feeds/videos.xml?user=${handle}`;
-            } else if (link.includes('/user/')) {
-                const user = link.split('/user/')[1].split('?')[0];
-                rssUrl = `https://www.youtube.com/feeds/videos.xml?user=${user}`;
+        toggle.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                toggle.click();
             }
+        });
 
-            if (!rssUrl) return;
+        button.appendChild(heart);
+        button.appendChild(toggle);
+    }
 
-            try {
-                // RSS2JSON API wandelt den YouTube-Feed in verarbeitbares JSON um
-                const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`);
-                const data = await res.json();
+    checkNewVideo(button);
+});
 
-                if (data.status === 'ok' && data.items && data.items.length > 0) {
-                    const latestVideo = data.items[0];
-                    const pubDate = new Date(latestVideo.pubDate).getTime();
-                    const now = new Date().getTime();
-                    
-                    // Zeitfenster in Stunden für "neues Video" (hier 24 Stunden)
-                    const hoursDiff = (now - pubDate) / (1000 * 60 * 60);
+// Prüfung auf neue Videos
+async function checkNewVideo(button) {
+    let rssUrl = '';
+    const channelId = button.getAttribute('data-channel-id');
+    const onclickAttr = button.getAttribute('onclick') || '';
+    const matchUrl = onclickAttr.match(/'([^']+)'/);
 
-                    if (hoursDiff <= 24) {
-                        const dot = document.createElement('div');
-                        dot.className = 'new-badge';
-                        dot.title = `Neues Video: ${latestVideo.title}`;
-                        button.appendChild(dot);
-                    }
-                }
-            } catch (e) {
-                // Stille Fehlerbehandlung bei Abfragebeschränkungen
+    if (!matchUrl) return;
+
+    const link = matchUrl[1];
+
+    if (channelId) {
+        rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
+    } else if (link.includes('/@')) {
+        const handle = link.split('/@')[1].split('?')[0];
+        rssUrl = `https://www.youtube.com/feeds/videos.xml?user=${handle}`;
+    } else if (link.includes('/user/')) {
+        const user = link.split('/user/')[1].split('?')[0];
+        rssUrl = `https://www.youtube.com/feeds/videos.xml?user=${user}`;
+    }
+
+    if (!rssUrl) return;
+
+    try {
+        const res = await fetch(
+            `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`
+        );
+
+        const data = await res.json();
+
+        if (data.status === 'ok' && data.items && data.items.length > 0) {
+            const latestVideo = data.items[0];
+            const pubDate = new Date(latestVideo.pubDate).getTime();
+            const now = new Date().getTime();
+
+            const hoursDiff = (now - pubDate) / (1000 * 60 * 60);
+
+            if (hoursDiff <= 24) {
+                const dot = document.createElement('div');
+                dot.className = 'new-badge';
+                dot.title = `Neues Video: ${latestVideo.title}`;
+                button.appendChild(dot);
             }
         }
-    </script>
+    } catch (e) {
+        // Stille Fehlerbehandlung
+    }
+}
+</script>
+
 </body>
 </html>
